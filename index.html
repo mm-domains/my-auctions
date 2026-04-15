@@ -2,30 +2,31 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Premium Auctions | قاعدة بيانات المزادات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Auctions | Search Tool</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <style>
-        body { font-family: sans-serif; background: #121212; color: #eee; padding: 20px; }
-        .container { background: #1e1e1e; padding: 20px; border-radius: 10px; }
-        table.dataTable { background: #1e1e1e; color: #eee; }
-        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { color: #eee; margin-bottom: 15px; }
-        table.dataTable tbody tr { background-color: #1e1e1e; }
-        table.dataTable tbody tr:hover { background-color: #252525; }
-        .bid-btn { background: #00d2ff; color: #000; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        body { background: #121212; color: #eee; font-family: sans-serif; padding: 20px; }
+        .container { background: #1e1e1e; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: #00d2ff; text-align: center; }
+        table.dataTable { border-bottom: 1px solid #333 !important; }
+        .bid-btn { background: #00d2ff; color: #000; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px; }
+        .dataTables_wrapper .dataTables_filter input { background: #333; color: #fff; border: 1px solid #444; border-radius: 5px; padding: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="color: #00d2ff;">محرك بحث المزادات المميزة (50k+ Domains)</h2>
+    <h2>محرك بحث المزادات المميزة</h2>
     <table id="auctionsTable" class="display responsive nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>الدومين</th>
                 <th>ينتهي في</th>
                 <th>السعر</th>
-                <th>الزوار</th>
+                <th>تجديد</th>
+                <th>زوار</th>
                 <th>التقييم</th>
                 <th>العمر</th>
                 <th>رابط</th>
@@ -36,30 +37,29 @@
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
 <script>
 $(document).ready(function() {
     $('#auctionsTable').DataTable({
-        ajax: {
-            url: 'data.json', // الملف الذي يرفعه السكريبت
-            dataSrc: ''
-        },
+        ajax: { url: 'data.json', dataSrc: '' },
         columns: [
-            { data: 'd' },
-            { data: 'e' },
-            { data: 'p', render: function(data) { return '$' + data; } },
-            { data: 'v' },
-            { data: 'a', render: function(data) { return '$' + data; } },
-            { data: 'g' },
+            { data: 'd' }, // Domain
+            { data: 't' }, // Time
+            { data: 'p', render: d => '$' + d }, // Price
+            { data: 'r', render: d => '$' + d }, // Renewal
+            { data: 'v' }, // Visitors
+            { data: 'a', render: d => '$' + d }, // Appraisal
+            { data: 'g' }, // Age
             { 
                 data: 'l', 
-                render: function(data, type, row) {
-                    return `<a href="${data}" target="_blank" class="bid-btn">مزايدة</a>`;
+                render: function(link) {
+                    return `<a href="${link}" target="_blank" class="bid-btn">مزايدة الآن</a>`;
                 }
             }
         ],
         pageLength: 25,
-        order: [[2, 'desc']], // ترتيب حسب السعر افتراضياً
+        order: [[2, 'desc']], // ترتيب حسب السعر
         language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json' }
     });
 });
